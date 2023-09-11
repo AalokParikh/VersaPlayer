@@ -26,9 +26,9 @@ open class VersaPlayerControlsBehaviour {
     
     /// Whether controls should be shown when showingControls is false
     public var shouldShowControls: Bool = true
-    
-    public var shouldAutohide: Bool = false
 
+    public var shouldAutohide: Bool = false
+    
     /// Elapsed time between controls being shown and current time
     public var elapsedTime: TimeInterval = 0
     
@@ -72,6 +72,7 @@ open class VersaPlayerControlsBehaviour {
     
     /// Default activation block
     open func defaultActivationBlock() {
+        if controls.handler.isPipModeEnabled { return }
         controls.isHidden = false
         #if os(macOS)
         controls.alphaValue = 1
@@ -99,31 +100,26 @@ open class VersaPlayerControlsBehaviour {
     
     /// Hide the controls
     open func hide() {
-        if shouldAutohide {
-          if deactivationBlock != nil {
-                  deactivationBlock!(controls)
-          } else {
-              defaultDeactivationBlock()
-          }
-          showingControls = false
+        if deactivationBlock != nil {
+            deactivationBlock!(controls)
+        }else {
+            defaultDeactivationBlock()
         }
-  
+        showingControls = false
     }
     
     /// Show the controls
     open func show() {
-        if shouldAutohide {
-            if !shouldShowControls {
-                return
-            }
-            activationTime = elapsedTime
-            if activationBlock != nil {
-                activationBlock!(controls)
-            } else {
-                defaultActivationBlock()
-            }
-            showingControls = true
+        if !shouldShowControls {
+            return
         }
+        activationTime = elapsedTime
+        if activationBlock != nil {
+            activationBlock!(controls)
+        }else {
+            defaultActivationBlock()
+        }
+        showingControls = true
     }
     
 }

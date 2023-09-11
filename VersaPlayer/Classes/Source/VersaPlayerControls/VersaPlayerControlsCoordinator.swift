@@ -56,20 +56,23 @@ open class VersaPlayerControlsCoordinator: View, VersaPlayerGestureRecieverViewD
     #endif
     
     public func configureView() {
-        if controls != nil {
-            addSubview(controls)
+        if let h = superview as? VersaPlayerView {
+            player = h
+            if controls != nil {
+                addSubview(controls)
+            }
+            if gestureReciever == nil {
+                gestureReciever = VersaPlayerGestureRecieverView()
+                gestureReciever.delegate = self
+                #if os(macOS)
+                addSubview(gestureReciever, positioned: NSWindow.OrderingMode.below, relativeTo: nil)
+                #else
+                addSubview(gestureReciever)
+                sendSubviewToBack(gestureReciever)
+                #endif
+            }
+            stretchToEdges()
         }
-        if gestureReciever == nil {
-            gestureReciever = VersaPlayerGestureRecieverView()
-            gestureReciever.delegate = self
-            #if os(macOS)
-            addSubview(gestureReciever, positioned: NSWindow.OrderingMode.below, relativeTo: nil)
-            #else
-            addSubview(gestureReciever)
-            sendSubviewToBack(gestureReciever)
-            #endif
-        }
-        stretchToEdges()
     }
     
     public func stretchToEdges() {
@@ -97,7 +100,7 @@ open class VersaPlayerControlsCoordinator: View, VersaPlayerGestureRecieverViewD
     open func didTap(at point: CGPoint) {
         if controls.behaviour.showingControls {
             controls.behaviour.hide()
-        } else {
+        }else {
             controls.behaviour.show()
         }
     }
@@ -109,7 +112,7 @@ open class VersaPlayerControlsCoordinator: View, VersaPlayerGestureRecieverViewD
     open func didDoubleTap(at point: CGPoint) {
         if player.renderingView.playerLayer.videoGravity == AVLayerVideoGravity.resizeAspect {
             player.renderingView.playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-        } else {
+        }else {
             player.renderingView.playerLayer.videoGravity = AVLayerVideoGravity.resizeAspect
         }
     }

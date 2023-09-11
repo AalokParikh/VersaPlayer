@@ -21,13 +21,9 @@ open class VersaPlayerRenderingView: View {
   }
   #endif
 
-  lazy public var playerLayer: AVPlayerLayer = {
-     #if os(iOS)
-        return layer as! AVPlayerLayer
-     #else
-      return AVPlayerLayer()
-    #endif
-  }()
+  public var playerLayer: AVPlayerLayer {
+      return layer as! AVPlayerLayer
+  }
 
   /// VersaPlayer instance being rendered by renderingLayer
   public weak var player: VersaPlayerView!
