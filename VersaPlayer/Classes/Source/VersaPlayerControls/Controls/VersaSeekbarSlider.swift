@@ -19,4 +19,9 @@ public typealias Slider = UIProgressView
 
 open class VersaSeekbarSlider: Slider {
 
+    @IBInspectable var trackHeight: CGFloat = 2
+
+    open override func trackRect(forBounds bounds: CGRect) -> CGRect {
+        return CGRect(origin: bounds.origin, size: CGSize(width: bounds.width, height: trackHeight))
+    }
 }
