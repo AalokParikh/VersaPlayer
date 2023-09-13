@@ -325,6 +325,14 @@ open class VersaPlayerControls: View {
         handler.isSeeking = true
         let time = handler.player.currentTime() - CMTime(seconds: skipSize, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
         handler.player.seek(to: time)
+        if skipForwardButton?.image(for: .normal) == skipForwardButton?.activeImage {
+//            if let duration = handler.player.currentItem?.duration, time <= duration {
+                skipForwardButton?.set(active: false)
+                playPauseButton?.isHidden = false
+                handler.player.seek(to: time)
+                handler.play()
+//            }
+        }
     }
     
     /// End seeking
